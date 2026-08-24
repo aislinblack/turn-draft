@@ -10,7 +10,7 @@ Open `index.html` directly, or serve the folder locally:
 python3 -m http.server 8000
 ```
 
-Then visit `http://localhost:8000`.
+Then visit `http://localhost:8000` for the 1.01 board, or `http://localhost:8000/meghanmoo/` for Meghan's pick-six board.
 
 ## What it does
 
@@ -23,5 +23,6 @@ Then visit `http://localhost:8000`.
 - Supports an editable bench size (seven by default) and a late QB2 without treating the backup as another starter.
 - Evaluates players as values, fair picks, or reaches against the current overall pick.
 - Saves draft progress in local browser storage.
+- Includes a separate farm-themed, beginner-friendly Meghanmoo route for draft slot 1.06, with Josh Allen as the first-round target, a best-RB/WR fallback, and its own isolated saved draft state.
 
 The bundled player board uses 2026 1QB redraft ADP captured August 23, 2026, with late-round depth from ESPN's August 19 PPR sheet and current K/DST consensus. Rankings are deliberately treated as product data rather than predictions; news and league-specific scoring should always move the board.

@@ -45,13 +45,21 @@ const players = [
   [169,"Germie Bernard","WR","PIT",222],[170,"Antonio Williams","WR","WAS",274],[171,"Omar Cooper Jr.","WR","NYJ",195]
 ].map(([rank,name,pos,team,adp]) => ({rank,name,pos,team,adp,rookie:rookieNames.has(name),id:name.toLowerCase().replace(/[^a-z0-9]+/g,"-")}));
 
-const saved = JSON.parse(localStorage.getItem("turn-draft-state") || "null");
-const state = { teams: 12, slot: 1, scoring: "ppr", qbFormat: "1qb", benchCount: 7, pressure: "early", bengalsRoom: true, upside: true, picks: [], filter: "ALL", search: "", visible: 36, ...(saved || {}) };
+const profile = window.DRAFT_PROFILE || {
+  id: "aislin",
+  storageKey: "turn-draft-state",
+  slot: 1,
+  priorityPlayer: "Joe Burrow",
+  priorityPick: 25,
+  turnOwner: "YOUR"
+};
+const saved = JSON.parse(localStorage.getItem(profile.storageKey) || "null");
+const state = { teams: 12, slot: profile.slot, scoring: "ppr", qbFormat: "1qb", benchCount: 7, pressure: "early", bengalsRoom: true, upside: true, picks: [], filter: "ALL", search: "", visible: 36, ...(saved || {}) };
 const qbByes = {BUF:7,BAL:13,NE:11,WAS:7,PHI:10,CIN:6,CHI:10,LAC:7,DAL:14,JAX:7,NYG:8,DEN:10,KC:5,MIN:6,NO:8,DET:6,LAR:11,SF:8,TB:10,MIA:6,IND:13};
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
-const save = () => localStorage.setItem("turn-draft-state", JSON.stringify(state));
+const save = () => localStorage.setItem(profile.storageKey, JSON.stringify(state));
 const findPlayer = (id) => players.find(p => p.id === id);
 const overallToLabel = (overall) => `${Math.ceil(overall/state.teams)}.${String(((overall-1)%state.teams)+1).padStart(2,"0")}`;
 
@@ -70,6 +78,7 @@ function nextMyPicks() { const current=getCurrentOverall(); return myPickNumbers
 
 function turnRead(player) {
   const pick = getCurrentOverall();
+  if (profile.id === "meghanmoo" && player.name === "Josh Allen") return [pick <= 6 ? "MEGHAN'S TARGET" : "PLAN B", pick <= 6 ? "value" : "reach"];
   if (player.name === "Josh Allen") return [pick <= 9 ? "EXPECTED BY #9" : "ROOM MISS", "reach"];
   if (state.bengalsRoom && player.team === "CIN") return ["CIN FAN TAX", "reach"];
   const diff = player.adp - pick;
@@ -100,7 +109,7 @@ function positionWeight(player) {
   if (counts[player.pos] >= 3) weight -= 6;
   if (player.pos === "K" || player.pos === "DST") weight += round < totalRounds()-2 ? -90 : (counts[player.pos] ? -35 : 18);
   if (player.rookie && state.upside && round >= 9) weight += round >= 12 ? 18 : 10;
-  if (state.bengalsRoom && player.name === "Joe Burrow" && !(counts.QB||0) && getCurrentOverall() === 25) weight += 75;
+  if (player.name === profile.priorityPlayer && getCurrentOverall() === profile.priorityPick && !(counts[player.pos]||0)) weight += 75;
   return weight;
 }
 
@@ -126,7 +135,7 @@ function renderHeader() {
   document.body.classList.toggle("my-turn",mine);
   $("#myTurnAlert").classList.toggle("show",mine);
   $("#alertPick").textContent=`PICK ${overallToLabel(overall)} · #${overall} OVERALL`;
-  document.title=mine?`YOUR PICK ${overallToLabel(overall)} — Turn Draft`:`Pick ${overallToLabel(overall)} — Turn Draft`;
+  document.title=mine?`${profile.turnOwner} PICK ${overallToLabel(overall)} — Turn Draft`:`Pick ${overallToLabel(overall)} — Turn Draft`;
 }
 
 function renderPlayers() {
@@ -163,7 +172,9 @@ function renderLog() {
 
 function renderPressure() {
   const config={normal:{width:"20%",badge:"COOL",verdict:"Hard pass",window:"Rounds 6–8",text:"In a typical 1QB room, early quarterback costs too much RB/WR value."},early:{width:"50%",badge:"ALLEN LOCK",verdict:"Luxury reach",window:"4.12 / 5.01",text:"Allen will be gone by Kelsey's pick at 1.09—and may go earlier. That pushes at least one normally top-23 position player toward your turn, but one QB does not create a run."},run:{width:"90%",badge:"HOT",verdict:"Defensible",window:"Take at 3.01",text:"Allen by 1.09 is expected. Switch to QB-run logic only if at least two more quarterbacks follow him before pick 24."}}[state.pressure];
-  const roomConfig=state.bengalsRoom?{width:"82%",badge:"HOMER TAX",verdict:"Take him",window:"3.01",text:"Allen is locked to go by Kelsey's 1.09, pushing a position player down. Separately, Bengals fans make Burrow unlikely to survive to your 4.12 return."}:config;
+  const roomConfig=profile.id==="meghanmoo"
+    ? {width:"92%",badge:"ALLEN PLAN",verdict:"Take at 1.06",window:"Best elite RB / WR",text:"Take Josh Allen if he reaches Meghan at 1.06. If someone jumps her, the recommendations automatically pivot to the best elite running back or wide receiver left."}
+    : state.bengalsRoom?{width:"82%",badge:"HOMER TAX",verdict:"Take him",window:"3.01",text:"Allen is locked to go by Kelsey's 1.09, pushing a position player down. Separately, Bengals fans make Burrow unlikely to survive to your 4.12 return."}:config;
   $("#pressureMeter").style.width=roomConfig.width; $("#pressureBadge").textContent=roomConfig.badge; $("#burrowVerdict").textContent=roomConfig.verdict; $("#fallbackWindow").textContent=roomConfig.window; $("#pressureExplanation").textContent=roomConfig.text;
   $$("#qbPressure button").forEach(b=>b.classList.toggle("active",b.dataset.value===state.pressure));
   $("#bengalsToggle").classList.toggle("active",state.bengalsRoom); $("#bengalsToggle b").textContent=state.bengalsRoom?"ON":"OFF";

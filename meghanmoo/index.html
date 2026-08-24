@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#35513a" />
+    <title>Meghanmoo Draft — Pick-six co-pilot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Serif+Display&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="meghan-page">
+    <div class="noise" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-mark">M</span><span>MEGHANMOO DRAFT ✿</span></a>
+      <div class="draft-status"><span class="live-dot"></span><span id="statusText">PRE-DRAFT · PICK 1.01</span></div>
+      <div class="header-actions">
+        <a class="profile-link" href="../">Aislin’s board →</a>
+        <button class="text-button" id="undoButton" type="button">Undo</button>
+        <button class="text-button" id="resetButton" type="button">Reset</button>
+      </div>
+    </header>
+    <div class="my-turn-alert" id="myTurnAlert" role="alert" aria-live="assertive">
+      <span class="turn-pulse"></span>
+      <strong>MEGHAN, YOU’RE ON THE CLOCK</strong>
+      <span id="alertPick">PICK 1.06 · #6 OVERALL</span>
+      <a href="#liveBoard">Open best available ↓</a>
+    </div>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">MEGHANMOO’S FANTASY FARM ✿</p>
+          <h1>Draft happy.<span aria-hidden="true">✿</span></h1>
+          <p class="hero-copy">Meghan picks at <strong>1.06, 2.07 + 3.06</strong>. Take Josh Allen first, then let the board guide a balanced herd of running backs, wide receivers, and one excellent tight end.</p>
+          <div class="farm-sign" aria-label="Farm draft motto"><span>🐄</span> GOOD PICKS · GOOD VIBES · NO PANIC</div>
+        </div>
+        <div class="on-clock-card">
+          <span class="micro-label">CURRENT PICK</span>
+          <div class="clock-row"><span id="currentPick">1.01</span><span class="clock-divider"></span><span id="overallPick">#1</span></div>
+          <p id="clockHint">Five selections until Meghan’s first pick.</p>
+        </div>
+      </section>
+
+      <section class="pick-strip" aria-label="Meghan's upcoming picks">
+        <div class="strip-label">MEGHAN’S PICKS</div>
+        <div id="pickTimeline" class="pick-timeline"></div>
+      </section>
+
+      <section class="strategy-grid">
+        <article class="plan-card feature-card">
+          <div class="card-heading">
+            <div><p class="eyebrow">THE FARM PLAN</p><h2>Three easy first steps</h2></div>
+            <span class="pill green">12-team · Pick 6</span>
+          </div>
+          <div class="script-list">
+            <div class="script-row">
+              <span class="round-number">01</span>
+              <div class="player-avatar qb">JA</div>
+              <div class="script-player"><strong>Josh Allen</strong><span>QB · BUF</span></div>
+              <div class="script-note"><strong>Meghan’s guy</strong><span>Take him at 1.06</span></div>
+            </div>
+            <div class="script-row flexible">
+              <span class="round-number">02</span>
+              <div class="player-avatar flex">↗</div>
+              <div class="script-player"><strong>Best RB / WR</strong><span>Elite talent left at 2.07</span></div>
+              <div class="script-note"><strong>Follow the board</strong><span>Tap Mine on its top choice</span></div>
+            </div>
+            <div class="script-row">
+              <span class="round-number">03</span>
+              <div class="player-avatar rb">⚖</div>
+              <div class="script-player"><strong>Balance the roster</strong><span>RB / WR, or elite TE</span></div>
+              <div class="script-note"><strong>Fill the empty side</strong><span>No second QB yet</span></div>
+            </div>
+          </div>
+          <div class="strategy-callout">
+            <span class="callout-icon">T</span>
+            <div><strong>The Taylor rule, revised</strong><p>One Taylor can win a tiebreaker. A full Taylor-only roster is now officially reserved for special events. The top three recommendations are Meghan’s safe shortlist.</p></div>
+          </div>
+        </article>
+
+        <aside class="room-card">
+          <div class="card-heading compact"><div><p class="eyebrow">BEGINNER MODE</p><h2>Simple is smart</h2></div><span id="pressureBadge" class="pill amber">ALLEN PLAN</span></div>
+          <p class="room-copy">Mark each pick as it happens. When Meghan’s turn lights up, choose from the top three recommendations.</p>
+          <div class="segmented" id="qbPressure" role="group" aria-label="Draft risk preference">
+            <button data-value="normal" type="button">Safe</button>
+            <button data-value="early" class="active" type="button">Balanced</button>
+            <button data-value="run" type="button">Chaos</button>
+          </div>
+          <div class="meter"><span id="pressureMeter"></span></div>
+          <div class="room-stat"><span>Josh Allen at 1.06</span><strong id="burrowVerdict">Take at 1.06</strong></div>
+          <div class="room-stat"><span>If Allen is gone</span><strong id="fallbackWindow">Best elite RB / WR</strong></div>
+          <p class="micro-copy" id="pressureExplanation">Take Josh Allen if he reaches Meghan. If he is stolen, the board automatically pivots to the best elite running back or wide receiver left.</p>
+          <button class="upside-toggle active" id="bengalsToggle" type="button"><span>B</span><span><strong>Bengals-fan room</strong><small>Flag Cincinnati homer picks</small></span><b>ON</b></button>
+          <button class="upside-toggle active" id="upsideToggle" type="button"><span>🌱</span><span><strong>Rookie seedling mode</strong><small>Grow upside after Round 8</small></span><b>ON</b></button>
+        </aside>
+      </section>
+
+      <section class="draft-room" id="liveBoard">
+        <div class="room-toolbar">
+          <div><p class="eyebrow">LIVE DRAFT BOARD</p><h2>Who’s still in the pasture?</h2></div>
+          <label class="search"><span>⌕</span><input id="playerSearch" type="search" placeholder="Search player or team" /></label>
+          <div class="filters" id="positionFilters" role="group" aria-label="Filter by position">
+            <button class="active" data-position="ALL" type="button">All</button>
+            <button data-position="RB" type="button">RB</button>
+            <button data-position="WR" type="button">WR</button>
+            <button data-position="QB" type="button">QB</button>
+            <button data-position="TE" type="button">TE</button>
+            <button data-position="K" type="button">K</button>
+            <button data-position="DST" type="button">D/ST</button>
+          </div>
+        </div>
+
+        <div class="board-layout">
+          <div class="player-table-wrap">
+            <table class="player-table">
+              <thead><tr><th>RK</th><th>PLAYER</th><th>POS</th><th>ADP</th><th>FARM READ</th><th></th></tr></thead>
+              <tbody id="playerTable"></tbody>
+            </table>
+            <button class="load-more" id="loadMore" type="button">Show more players</button>
+          </div>
+
+          <aside class="side-panel">
+            <div class="recommendation">
+              <p class="eyebrow">MEGHAN’S SHORTLIST RIGHT NOW</p>
+              <div id="recommendationList"></div>
+            </div>
+            <div class="my-roster">
+              <div class="side-title"><h3>Meghan’s roster</h3><span id="rosterCount">0 drafted</span></div>
+              <div id="starterStatus" class="starter-status"></div>
+              <div id="rosterList" class="roster-list"><p class="empty-state">Her picks will gather here.</p></div>
+            </div>
+            <div class="pick-log">
+              <div class="side-title"><h3>Latest picks</h3><span id="picksCount">0 / 192</span></div>
+              <div id="pickLog"><p class="empty-state">Mark players as the draft unfolds.</p></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="settings-card">
+        <div><p class="eyebrow">LEAGUE SETTINGS</p><h2>Move the fence posts</h2><p>The advice reacts to league size, draft slot, scoring, and bench depth.</p></div>
+        <label>Teams<select id="teamCount"><option>10</option><option selected>12</option><option>14</option><option>16</option></select></label>
+        <label>Draft slot<select id="draftSlot"></select></label>
+        <label>Scoring<select id="scoring"><option value="ppr" selected>Full PPR</option><option value="half">Half PPR</option><option value="standard">Standard</option></select></label>
+        <label>QB format<select id="qbFormat"><option value="1qb" selected>1 QB</option><option value="superflex">Superflex</option></select></label>
+        <label>Bench spots<select id="benchCount"><option>4</option><option>5</option><option>6</option><option selected>7</option><option>8</option><option>9</option></select></label>
+      </section>
+    </main>
+
+    <footer><span>MEGHANMOO’S FANTASY FARM · 2026</span><span>Rankings are a starting point. Good vibes are non-negotiable.</span></footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script>window.DRAFT_PROFILE={id:"meghanmoo",storageKey:"turn-draft-meghanmoo-state",slot:6,priorityPlayer:"Josh Allen",priorityPick:6,turnOwner:"MEGHAN’S"};</script>
+    <script src="../app.js"></script>
+  </body>
+</html>
