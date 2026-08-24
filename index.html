@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#081713" />
+    <title>Turn Draft — Fantasy draft co-pilot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-mark">T</span><span>TURN DRAFT</span></a>
+      <div class="draft-status"><span class="live-dot"></span><span id="statusText">PRE-DRAFT · PICK 1.01</span></div>
+      <div class="header-actions">
+        <button class="text-button" id="undoButton" type="button">Undo</button>
+        <button class="text-button" id="resetButton" type="button">Reset</button>
+      </div>
+    </header>
+    <div class="my-turn-alert" id="myTurnAlert" role="alert" aria-live="assertive">
+      <span class="turn-pulse"></span>
+      <strong>YOU’RE ON THE CLOCK</strong>
+      <span id="alertPick">PICK 1.01 · #1 OVERALL</span>
+      <a href="#liveBoard">Open best available ↓</a>
+    </div>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">YOUR WAR ROOM</p>
+          <h1>Own the turn.</h1>
+          <p class="hero-copy">You pick twice in a row at <strong>2.12 + 3.01</strong>. Build 1 QB · 2 RB · 2 WR · 1 TE · 1 Flex, then hunt upside on your bench.</p>
+        </div>
+        <div class="on-clock-card">
+          <span class="micro-label">ON THE CLOCK</span>
+          <div class="clock-row"><span id="currentPick">1.01</span><span class="clock-divider"></span><span id="overallPick">#1</span></div>
+          <p id="clockHint">Your pick. Start the draft with your anchor.</p>
+        </div>
+      </section>
+
+      <section class="pick-strip" aria-label="Your upcoming picks">
+        <div class="strip-label">YOUR PICKS</div>
+        <div id="pickTimeline" class="pick-timeline"></div>
+      </section>
+
+      <section class="strategy-grid">
+        <article class="plan-card feature-card">
+          <div class="card-heading">
+            <div><p class="eyebrow">OPENING SCRIPT</p><h2>Your 1–2–3 plan</h2></div>
+            <span class="pill green">12-team · 1QB</span>
+          </div>
+          <div class="script-list">
+            <div class="script-row">
+              <span class="round-number">01</span>
+              <div class="player-avatar rb">JG</div>
+              <div class="script-player"><strong>Jahmyr Gibbs</strong><span>RB · DET</span></div>
+              <div class="script-note"><strong>Anchor</strong><span>Consensus 1.01</span></div>
+            </div>
+            <div class="script-row flexible">
+              <span class="round-number">02</span>
+              <div class="player-avatar flex">↗</div>
+              <div class="script-player"><strong>Best RB / WR</strong><span>Value that reaches 2.12</span></div>
+              <div class="script-note"><strong>Expert priority</strong><span id="roundTwoTargets">A.J. Brown · Collins · Bowers</span></div>
+            </div>
+            <div class="script-row warning-row">
+              <span class="round-number">03</span>
+              <div class="player-avatar qb">JB</div>
+              <div class="script-player"><strong>Joe Burrow</strong><span>QB · CIN</span></div>
+              <div class="script-note"><strong>Your-room value</strong><span>Known Bengals tax · take at 3.01</span></div>
+            </div>
+          </div>
+          <div class="strategy-callout">
+            <span class="callout-icon">!</span>
+            <div><strong>Your room changes the answer</strong><p>Take the best falling RB/WR at 2.12, then Burrow at 3.01. Consensus ADP cannot help if you already know Bengals fans will remove him before your 4.12 return.</p></div>
+          </div>
+        </article>
+
+        <aside class="room-card">
+          <div class="card-heading compact"><div><p class="eyebrow">ROOM READ</p><h2>QB pressure</h2></div><span id="pressureBadge" class="pill amber">WARM</span></div>
+          <p class="room-copy">How aggressively does this league take quarterbacks?</p>
+          <div class="segmented" id="qbPressure" role="group" aria-label="Quarterback draft pressure">
+            <button data-value="normal" type="button">Normal</button>
+            <button data-value="early" class="active" type="button">Allen in R1</button>
+            <button data-value="run" type="button">QB run</button>
+          </div>
+          <div class="meter"><span id="pressureMeter"></span></div>
+          <div class="room-stat"><span>Burrow at 3.01</span><strong id="burrowVerdict">Luxury reach</strong></div>
+          <div class="room-stat"><span>QB target window</span><strong id="fallbackWindow">4.12 / 5.01</strong></div>
+          <p class="micro-copy" id="pressureExplanation">One early QB is a data point, not a run. Let the room spend while elite position players fall.</p>
+          <button class="upside-toggle active" id="bengalsToggle" type="button"><span>B</span><span><strong>Bengals-fan room</strong><small>Apply a Cincinnati homer tax</small></span><b>ON</b></button>
+          <button class="upside-toggle active" id="upsideToggle" type="button"><span>↗</span><span><strong>Rookie upside mode</strong><small>Boost rookies after Round 8</small></span><b>ON</b></button>
+        </aside>
+      </section>
+
+      <section class="draft-room" id="liveBoard">
+        <div class="room-toolbar">
+          <div><p class="eyebrow">LIVE BOARD</p><h2>Best available</h2></div>
+          <label class="search"><span>⌕</span><input id="playerSearch" type="search" placeholder="Search player or team" /></label>
+          <div class="filters" id="positionFilters" role="group" aria-label="Filter by position">
+            <button class="active" data-position="ALL" type="button">All</button>
+            <button data-position="RB" type="button">RB</button>
+            <button data-position="WR" type="button">WR</button>
+            <button data-position="QB" type="button">QB</button>
+            <button data-position="TE" type="button">TE</button>
+            <button data-position="K" type="button">K</button>
+            <button data-position="DST" type="button">D/ST</button>
+          </div>
+        </div>
+
+        <div class="board-layout">
+          <div class="player-table-wrap">
+            <table class="player-table">
+              <thead><tr><th>RK</th><th>PLAYER</th><th>POS</th><th>ADP</th><th>TURN READ</th><th></th></tr></thead>
+              <tbody id="playerTable"></tbody>
+            </table>
+            <button class="load-more" id="loadMore" type="button">Show more players</button>
+          </div>
+
+          <aside class="side-panel">
+            <div class="recommendation">
+              <p class="eyebrow">IF YOU WERE PICKING NOW</p>
+              <div id="recommendationList"></div>
+            </div>
+            <div class="my-roster">
+              <div class="side-title"><h3>Your roster</h3><span id="rosterCount">0 drafted</span></div>
+              <div id="starterStatus" class="starter-status"></div>
+              <div id="rosterList" class="roster-list"><p class="empty-state">Your picks will collect here.</p></div>
+            </div>
+            <div class="pick-log">
+              <div class="side-title"><h3>Latest picks</h3><span id="picksCount">0 / 192</span></div>
+              <div id="pickLog"><p class="empty-state">Mark players as the draft unfolds.</p></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="settings-card">
+        <div><p class="eyebrow">LEAGUE SETTINGS</p><h2>Calibrate the advice</h2><p>Recommendations react to league size, draft slot, scoring, and your room read.</p></div>
+        <label>Teams<select id="teamCount"><option>10</option><option selected>12</option><option>14</option><option>16</option></select></label>
+        <label>Draft slot<select id="draftSlot"></select></label>
+        <label>Scoring<select id="scoring"><option value="ppr" selected>Full PPR</option><option value="half">Half PPR</option><option value="standard">Standard</option></select></label>
+        <label>QB format<select id="qbFormat"><option value="1qb" selected>1 QB</option><option value="superflex">Superflex</option></select></label>
+        <label>Bench spots<select id="benchCount"><option>4</option><option>5</option><option>6</option><option selected>7</option><option>8</option><option>9</option></select></label>
+      </section>
+    </main>
+
+    <footer><span>TURN DRAFT · 2026 REDRAFT</span><span>Rankings are a starting point. News and league settings move the board.</span></footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
