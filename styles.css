@@ -168,6 +168,8 @@ body.meghan-page {
 .meghan-page .room-card .eyebrow, .meghan-page .room-copy, .meghan-page .micro-copy, .meghan-page .room-stat span { color: #efd4d6; }
 .meghan-page .segmented { border-color: #ca7f86; }
 .meghan-page .segmented button { border-right-color: #ca7f86; color: #f5dfe1; }
+.meghan-page .segmented button.active { color: #243127; }
+.meghan-page .pill.amber { color: #243127; }
 .meghan-page .meter { background: #54252d; }
 .meghan-page .meter span { background: #ffe182; }
 .meghan-page .room-stat { border-top-color: #8e4a54; }
