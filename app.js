@@ -150,7 +150,8 @@ function renderPlayers() {
 }
 
 function renderRecommendations() {
-  $("#recommendationList").innerHTML=recommendations().map((p,i)=>`<div class="rec-player"><span class="rec-rank">0${i+1}</span><div><strong>${p.name}</strong><small>${p.pos} · ${p.team} · ADP ${p.adp}</small></div><span class="rec-score">${Math.max(p.score,1)}</span></div>`).join("");
+  const onClock=isMyPick();
+  $("#recommendationList").innerHTML=recommendations().map((p,i)=>`<div class="rec-player"><span class="rec-rank">0${i+1}</span><div><strong>${p.name}</strong><small>${p.pos} · ${p.team} · ADP ${p.adp}</small></div>${onClock?`<button class="rec-take-button" data-draft="${p.id}" data-owner="mine" type="button">Take</button>`:`<span class="rec-score">${Math.max(p.score,1)}</span>`}</div>`).join("");
 }
 
 function renderRoster() {

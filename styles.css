@@ -125,6 +125,8 @@ h2, h3 { font-family: var(--serif); font-weight: 400; }
 .side-panel > div { padding: 24px; border-bottom: 1px solid var(--line); }.side-panel > div:last-child { border: 0; }
 .recommendation { background: linear-gradient(145deg, #fff0f7, #f1e9ff); }.recommendation .eyebrow { color: #a84878; }
 .rec-player { display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid rgba(85,110,42,.18); }.rec-player:first-child { border-top: 0; }.rec-rank { font: 500 10px var(--mono); color: #668134; }.rec-player strong { display: block; font-size: 11px; }.rec-player small { color: #778472; font: 400 9px var(--mono); }.rec-score { font: 500 9px var(--mono); }
+.rec-take-button { min-width: 54px; border: 1px solid var(--ink); border-radius: 999px; padding: 8px 11px; color: var(--white); background: var(--ink); font: 500 9px var(--mono); text-transform: uppercase; cursor: pointer; }
+.rec-take-button:hover, .rec-take-button:focus-visible { color: var(--ink); background: var(--green); outline: 2px solid var(--ink); outline-offset: 2px; }
 .side-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 13px; }.side-title h3 { margin: 0; font-size: 13px; }.side-title span { color: #84908c; font: 400 9px var(--mono); }
 .empty-state { color: #8d9894; font-size: 10px; line-height: 1.5; margin: 0; }
 .starter-status { display: flex; flex-wrap: wrap; gap: 5px; padding-bottom: 12px; }.slot-status { padding: 5px 7px; border-radius: 999px; background: var(--paper-2); color: #78617e; font: 500 8px var(--mono); }.slot-status.filled { color: #963366; background: #ffd9e9; }
