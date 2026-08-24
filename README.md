@@ -19,6 +19,7 @@ Then visit `http://localhost:8000`.
 - Recommends available players using ADP, the exact 1 QB / 2 RB / 2 WR / 1 TE / 1 Flex / 1 K / 1 D/ST lineup, scoring, and the room's QB pressure.
 - Includes an optional rookie-upside boost beginning in Round 9, after core starter needs are prioritized.
 - Includes a Bengals-fan room switch that adds urgency to Joe Burrow at the 2.12/3.01 turn and flags Cincinnati players with a homer-tax warning.
+- Models Josh Allen as a known first-round selection with a hard 1.09 deadline at Kelsey's pick, while treating a true multi-QB run as a separate signal.
 - Supports an editable bench size (seven by default) and a late QB2 without treating the backup as another starter.
 - Evaluates players as values, fair picks, or reaches against the current overall pick.
 - Saves draft progress in local browser storage.

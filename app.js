@@ -70,6 +70,7 @@ function nextMyPicks() { const current=getCurrentOverall(); return myPickNumbers
 
 function turnRead(player) {
   const pick = getCurrentOverall();
+  if (player.name === "Josh Allen") return [pick <= 9 ? "EXPECTED BY #9" : "ROOM MISS", "reach"];
   if (state.bengalsRoom && player.team === "CIN") return ["CIN FAN TAX", "reach"];
   const diff = player.adp - pick;
   if (diff >= 8) return ["VALUE +" + Math.round(diff), "value"];
@@ -161,8 +162,8 @@ function renderLog() {
 }
 
 function renderPressure() {
-  const config={normal:{width:"20%",badge:"COOL",verdict:"Hard pass",window:"Rounds 6–8",text:"In a typical 1QB room, early quarterback costs too much RB/WR value."},early:{width:"50%",badge:"WARM",verdict:"Luxury reach",window:"4.12 / 5.01",text:"One early QB is a data point, not a run. Try Burrow at your next turn while elite position players fall now."},run:{width:"90%",badge:"HOT",verdict:"Defensible",window:"Take at 3.01",text:"If three or more top quarterbacks go before pick 24, your room has reset the market. Burrow at the turn becomes defensible."}}[state.pressure];
-  const roomConfig=state.bengalsRoom?{width:"82%",badge:"HOMER TAX",verdict:"Take him",window:"3.01",text:"Your knowledge of this room matters more than public ADP. Burrow will not survive to 4.12, so secure him with the second pick of your turn."}:config;
+  const config={normal:{width:"20%",badge:"COOL",verdict:"Hard pass",window:"Rounds 6–8",text:"In a typical 1QB room, early quarterback costs too much RB/WR value."},early:{width:"50%",badge:"ALLEN LOCK",verdict:"Luxury reach",window:"4.12 / 5.01",text:"Allen will be gone by Kelsey's pick at 1.09—and may go earlier. That pushes at least one normally top-23 position player toward your turn, but one QB does not create a run."},run:{width:"90%",badge:"HOT",verdict:"Defensible",window:"Take at 3.01",text:"Allen by 1.09 is expected. Switch to QB-run logic only if at least two more quarterbacks follow him before pick 24."}}[state.pressure];
+  const roomConfig=state.bengalsRoom?{width:"82%",badge:"HOMER TAX",verdict:"Take him",window:"3.01",text:"Allen is locked to go by Kelsey's 1.09, pushing a position player down. Separately, Bengals fans make Burrow unlikely to survive to your 4.12 return."}:config;
   $("#pressureMeter").style.width=roomConfig.width; $("#pressureBadge").textContent=roomConfig.badge; $("#burrowVerdict").textContent=roomConfig.verdict; $("#fallbackWindow").textContent=roomConfig.window; $("#pressureExplanation").textContent=roomConfig.text;
   $$("#qbPressure button").forEach(b=>b.classList.toggle("active",b.dataset.value===state.pressure));
   $("#bengalsToggle").classList.toggle("active",state.bengalsRoom); $("#bengalsToggle b").textContent=state.bengalsRoom?"ON":"OFF";
